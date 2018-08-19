@@ -1,5 +1,10 @@
 - name: build
-  task: BABEL_ENV=build webpack
+  tasks:
+    - BABEL_ENV=build rollup -c
+    - taskfile build-css
+
+- name: build-css
+  task: postcss example/css/src --use autoprefixer --base example/css/src -d example/css
 
 - name: test
   tasks:
@@ -17,8 +22,8 @@
   task: (cd example/server && BABEL_ENV=server babel-node default.js)
 
 - name: watch
-  task: concurrently 'BABEL_ENV=build webpack --watch' 'npm run start'
-  
+  task: concurrently 'BABEL_ENV=build rollup -c -w' 'npm run start'
+
 - name: lint-fs
   tasks:
     - NODE_ENV=production npm run build
@@ -31,9 +36,9 @@
 
 - name: test-e2e
   tasks:
-    - BABEL_ENV=test-e2e webpack
+    - BABEL_ENV=test-e2e rollup -c
     - - concurrently -k -s first 'npm run start' 'testcafe chrome:headless ./tests/e2e/*.test.js'
-    - - - BABEL_ENV=build webpack
+    - - - BABEL_ENV=build rollup -c
     - - - - rm core.js
 
 - name: test-unit

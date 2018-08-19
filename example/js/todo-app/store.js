@@ -1,4 +1,4 @@
-import { generate } from 'shortid';
+import generate from 'shortid';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import indexedDb from './db';
@@ -80,7 +80,7 @@ const INITIAL_STATE = {
 
 /**
  * @method reducer
- * @param {Object} state 
+ * @param {Object} state
  * @param {Object} action
  * @return {Object}
  */
@@ -90,7 +90,7 @@ function reducer(state = INITIAL_STATE, action) {
 
         case actionTypes.ADD_TODO:
             return { ...state, todos: [...state.todos, action.result] };
-            
+
         case actionTypes.REMOVE_TODO:
             return { ...state, todos: state.todos.filter(model => model.id !== action.result) };
 

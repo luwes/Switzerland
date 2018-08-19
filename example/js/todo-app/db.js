@@ -28,22 +28,22 @@ export default once(() => {
 
         const open = window.indexedDB.open('database', VERSION);
 
-        open.addEventListener('upgradeneeded', () => {
+        open.onupgradeneeded = () => {
 
             if (!open.result.objectStoreNames.contains(NAME)) {
                 open.result.createObjectStore(NAME, { keyPath: 'id' });
             }
 
-        });
+        };
 
-        open.addEventListener('error', () => {
+        open.onerror = () => {
 
             // Continue without offline support.
             resolve({ active: false, add: identity, edit: identity, remove: identity, todos: [] });
 
-        });
+        };
 
-        open.addEventListener('success', () => {
+        open.onsuccess = () => {
 
             const db = open.result;
 
@@ -70,14 +70,15 @@ export default once(() => {
             };
 
             // Fetch all of the store todos in the database.
-            db.transaction(NAME, MODE.READONLY).objectStore(NAME).getAll().addEventListener('success', response => {
+            const all = db.transaction(NAME, MODE.READONLY).objectStore(NAME).getAll();
+            all.onsuccess = response => {
 
                 // ...And then resolve the middleware, passing in the required properties.
                 resolve({ active: true, add, edit: add, remove, todos: response.target.result });
 
-            });
+            };
 
-        });
+        };
 
     });
 

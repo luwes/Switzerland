@@ -1,11 +1,11 @@
 import by from 'sort-by';
 import * as R from 'ramda';
-import { store, addTodo, putTodo, removeTodo, markTodo } from './store';
 import plural from 'pluralize';
-import db from './db';
 import { create, h } from '../../../src/switzerland';
 import * as m from '../../../src/middleware';
 import { validate, once } from '../../../src/utilities';
+import db from './db';
+import { store, addTodo, putTodo, removeTodo, markTodo } from './store';
 
 /**
  * @constant populate

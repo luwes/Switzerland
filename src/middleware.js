@@ -56,7 +56,7 @@ const createBoundary = props => {
  * @constant resizeObserver ∷ ResizeObserver
  * @type {ResizeObserver}
  */
-const resizeObserver = hasDOM && global.ResizeObserver && new ResizeObserver(entries => {
+const resizeObserver = hasDOM && self.ResizeObserver && new ResizeObserver(entries => {
     entries.forEach(entry => entry.target.render({ adapt: entry }));
 });
 
@@ -64,7 +64,7 @@ const resizeObserver = hasDOM && global.ResizeObserver && new ResizeObserver(ent
  * @constant intersectionObserver ∷ IntersectionObserver
  * @type {IntersectionObserver}
  */
-const intersectionObserver = hasDOM && global.IntersectionObserver && new IntersectionObserver(entries => {
+const intersectionObserver = hasDOM && self.IntersectionObserver && new IntersectionObserver(entries => {
     entries.forEach(entry => entry.target.render({ intersection: entry }));
 });
 
@@ -812,10 +812,10 @@ export function wait(...names) {
                 return [...accum, ...Array.from(createBoundary(props).querySelectorAll(name))];
             }, [])).filter(node => !node.classList.contains('resolved'));
 
-            nodes.length === 0 ? resolve() : global.addEventListener(eventName, function listener(event) {
+            nodes.length === 0 ? resolve() : self.addEventListener(eventName, function listener(event) {
                 nodes.includes(event.detail.node) && resolved.add(event.detail.node);
                 resolved.size === nodes.length && do {
-                    global.removeEventListener(eventName, listener);
+                    self.removeEventListener(eventName, listener);
                     resolve();
                     resolved.clear();
                 };
